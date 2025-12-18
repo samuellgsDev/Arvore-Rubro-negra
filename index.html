@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árvore Rubro-Negra - Visualizador Interativo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌲 Árvore Rubro-Negra</h1>
+            <p>Visualização interativa de uma estrutura de dados auto-balanceada</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Painel de Controles -->
+            <aside class="control-panel">
+                <div class="control-section">
+                    <h3>Inserir Valor</h3>
+                    <div class="input-group">
+                        <input type="number" id="insertValue" placeholder="Valor">
+                        <button class="btn btn-primary" id="insertBtn">Inserir</button>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Buscar Valor</h3>
+                    <div class="input-group">
+                        <input type="number" id="searchValue" placeholder="Valor">
+                        <button class="btn btn-success" id="searchBtn">Buscar</button>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Remover Valor</h3>
+                    <div class="input-group">
+                        <input type="number" id="deleteValue" placeholder="Valor">
+                        <button class="btn btn-danger" id="deleteBtn">Remover</button>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Ações Rápidas</h3>
+                    <div class="button-group">
+                        <button class="btn btn-secondary btn-block" id="randomBtn">
+                            🎲 Inserir Aleatório
+                        </button>
+                        <button class="btn btn-secondary btn-block" id="exampleBtn">
+                            📚 Exemplo Didático
+                        </button>
+                        <button class="btn btn-warning btn-block" id="verifyBtn">
+                            ✓ Verificar Propriedades
+                        </button>
+                        <button class="btn btn-danger btn-block" id="clearBtn">
+                            🗑️ Limpar Árvore
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Velocidade da Animação</h3>
+                    <div class="speed-control">
+                        <input type="range" id="speedSlider" min="100" max="2000" value="500" step="100">
+                        <div class="speed-value"><span id="speedValue">500</span>ms</div>
+                    </div>
+                </div>
+
+                <div class="control-section properties-section">
+                    <h3>Propriedades Rubro-Negra</h3>
+                    <div class="property-item">
+                        <span class="number">1</span>
+                        <span class="text">Todo nó é vermelho ou preto</span>
+                    </div>
+                    <div class="property-item">
+                        <span class="number">2</span>
+                        <span class="text">A raiz é sempre preta</span>
+                    </div>
+                    <div class="property-item">
+                        <span class="number">3</span>
+                        <span class="text">Todas as folhas (NIL) são pretas</span>
+                    </div>
+                    <div class="property-item">
+                        <span class="number">4</span>
+                        <span class="text">Se um nó é vermelho, seus filhos são pretos</span>
+                    </div>
+                    <div class="property-item">
+                        <span class="number">5</span>
+                        <span class="text">Todo caminho de um nó até suas folhas contém o mesmo número de nós pretos</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Área de Visualização -->
+            <main class="visualization-area">
+                <div class="canvas-container">
+                    <canvas id="treeCanvas"></canvas>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color red"></div>
+                            <span>Vermelho</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color black"></div>
+                            <span>Preto</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações da Árvore -->
+                <div class="info-panel">
+                    <h4>📊 Informações da Árvore</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="value" id="nodeCount">0</div>
+                            <div class="label">Nós</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="value" id="treeHeight">0</div>
+                            <div class="label">Altura</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="value" id="blackHeight">0</div>
+                            <div class="label">Altura Negra</div>
+                        </div>
+                    </div>
+
+                    <div class="traversal-section">
+                        <h4 style="margin-bottom: 10px;">🔄 Percursos</h4>
+                        <div class="traversal-buttons">
+                            <button class="btn btn-secondary" id="inOrderBtn">Em Ordem</button>
+                            <button class="btn btn-secondary" id="preOrderBtn">Pré-Ordem</button>
+                            <button class="btn btn-secondary" id="postOrderBtn">Pós-Ordem</button>
+                        </div>
+                        <div class="traversal-result" id="traversalResult">
+                            Clique em um botão de percurso para visualizar
+                        </div>
+                    </div>
+
+                    <div class="verification-status" id="verificationStatus" style="display: none;">
+                        <!-- Status da verificação aparece aqui -->
+                    </div>
+                </div>
+
+                <!-- Log de Operações -->
+                <div class="log-container">
+                    <h4>📝 Log de Operações</h4>
+                    <div class="log-content" id="logContent">
+                        <div class="log-entry">Bem-vindo! Insira um valor para começar.</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/node.js"></script>
+    <script src="js/redblacktree.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
