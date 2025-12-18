@@ -15,16 +15,12 @@ class RedBlackTree {
         this.animationSteps = [];
     }
 
-    /**
-     * Limpa os passos de animação
-     */
+
     clearAnimationSteps() {
         this.animationSteps = [];
     }
 
-    /**
-     * Adiciona um passo de animação
-     */
+ 
     addAnimationStep(type, node, message) {
         this.animationSteps.push({
             type: type,
@@ -34,16 +30,12 @@ class RedBlackTree {
         });
     }
 
-    /**
-     * Retorna o estado atual da árvore para visualização
-     */
+  
     getTreeState() {
         return this.serializeTree(this.root);
     }
 
-    /**
-     * Serializa a árvore para um objeto
-     */
+   
     serializeTree(node) {
         if (node === null) return null;
         return {
@@ -54,9 +46,7 @@ class RedBlackTree {
         };
     }
 
-    /**
-     * Rotação à esquerda
-     */
+
     rotateLeft(node) {
         const rightChild = node.right;
         node.right = rightChild.left;
@@ -81,9 +71,7 @@ class RedBlackTree {
         this.addAnimationStep('rotate-left', node, `Rotação à esquerda no nó ${node.value}`);
     }
 
-    /**
-     * Rotação à direita
-     */
+ 
     rotateRight(node) {
         const leftChild = node.left;
         node.left = leftChild.right;
@@ -108,9 +96,7 @@ class RedBlackTree {
         this.addAnimationStep('rotate-right', node, `Rotação à direita no nó ${node.value}`);
     }
 
-    /**
-     * Insere um novo valor na árvore
-     */
+  
     insert(value) {
         this.clearAnimationSteps();
         
@@ -124,7 +110,7 @@ class RedBlackTree {
             return newNode;
         }
 
-        // Inserção BST padrão
+
         let current = this.root;
         let parent = null;
 
@@ -138,7 +124,7 @@ class RedBlackTree {
                 current = current.right;
             } else {
                 this.addAnimationStep('duplicate', current, `Valor ${value} já existe na árvore`);
-                return null; // Valor duplicado
+                return null; 
             }
         }
 
@@ -151,59 +137,56 @@ class RedBlackTree {
             this.addAnimationStep('insert-right', newNode, `Inserindo ${value} à direita de ${parent.value}`);
         }
 
-        // Corrigir violações
         this.fixInsert(newNode);
 
         return newNode;
     }
 
-    /**
-     * Corrige as violações das propriedades após inserção
-     */
+    
     fixInsert(node) {
         while (node !== this.root && node.parent.isRed()) {
             const uncle = node.uncle();
             const grandparent = node.grandparent();
 
             if (node.parent === grandparent.left) {
-                // Pai é filho esquerdo do avô
+
                 if (uncle !== null && uncle.isRed()) {
-                    // Caso 1: Tio é vermelho
+    
                     this.addAnimationStep('case1', node, `Caso 1: Tio ${uncle.value} é vermelho - recolorindo`);
                     node.parent.color = RBNode.BLACK;
                     uncle.color = RBNode.BLACK;
                     grandparent.color = RBNode.RED;
                     node = grandparent;
                 } else {
-                    // Caso 2: Tio é preto e nó é filho direito
+             
                     if (node === node.parent.right) {
                         this.addAnimationStep('case2', node, `Caso 2: Nó ${node.value} é filho direito - rotação esquerda`);
                         node = node.parent;
                         this.rotateLeft(node);
                     }
-                    // Caso 3: Tio é preto e nó é filho esquerdo
+                
                     this.addAnimationStep('case3', node, `Caso 3: Recolorindo e rotação direita`);
                     node.parent.color = RBNode.BLACK;
                     grandparent.color = RBNode.RED;
                     this.rotateRight(grandparent);
                 }
             } else {
-                // Pai é filho direito do avô (casos espelhados)
+                
                 if (uncle !== null && uncle.isRed()) {
-                    // Caso 1: Tio é vermelho
+                  
                     this.addAnimationStep('case1', node, `Caso 1: Tio ${uncle.value} é vermelho - recolorindo`);
                     node.parent.color = RBNode.BLACK;
                     uncle.color = RBNode.BLACK;
                     grandparent.color = RBNode.RED;
                     node = grandparent;
                 } else {
-                    // Caso 2: Tio é preto e nó é filho esquerdo
+                    
                     if (node === node.parent.left) {
                         this.addAnimationStep('case2', node, `Caso 2: Nó ${node.value} é filho esquerdo - rotação direita`);
                         node = node.parent;
                         this.rotateRight(node);
                     }
-                    // Caso 3: Tio é preto e nó é filho direito
+                   
                     this.addAnimationStep('case3', node, `Caso 3: Recolorindo e rotação esquerda`);
                     node.parent.color = RBNode.BLACK;
                     grandparent.color = RBNode.RED;
@@ -212,16 +195,14 @@ class RedBlackTree {
             }
         }
 
-        // Garantir que a raiz seja preta
+
         if (this.root.color === RBNode.RED) {
             this.root.color = RBNode.BLACK;
             this.addAnimationStep('root-black', this.root, 'Colorindo raiz de preto');
         }
     }
 
-    /**
-     * Busca um valor na árvore
-     */
+
     search(value) {
         this.clearAnimationSteps();
         let current = this.root;
@@ -245,9 +226,7 @@ class RedBlackTree {
         return null;
     }
 
-    /**
-     * Encontra o nó com valor mínimo a partir de um nó
-     */
+
     minimum(node) {
         while (node.left !== null) {
             node = node.left;
@@ -255,9 +234,7 @@ class RedBlackTree {
         return node;
     }
 
-    /**
-     * Substitui um nó por outro
-     */
+
     transplant(u, v) {
         if (u.parent === null) {
             this.root = v;
@@ -271,9 +248,6 @@ class RedBlackTree {
         }
     }
 
-    /**
-     * Remove um valor da árvore
-     */
     delete(value) {
         this.clearAnimationSteps();
         const node = this.searchNode(value);
@@ -288,9 +262,7 @@ class RedBlackTree {
         return true;
     }
 
-    /**
-     * Busca um nó sem animação
-     */
+
     searchNode(value) {
         let current = this.root;
         while (current !== null) {
@@ -305,9 +277,6 @@ class RedBlackTree {
         return null;
     }
 
-    /**
-     * Remove um nó da árvore
-     */
     deleteNode(z) {
         let y = z;
         let yOriginalColor = y.color;
@@ -349,9 +318,7 @@ class RedBlackTree {
         }
     }
 
-    /**
-     * Corrige as violações das propriedades após remoção
-     */
+
     fixDelete(x, xParent) {
         while (x !== this.root && (x === null || x.isBlack())) {
             if (xParent === null) break;
@@ -393,7 +360,7 @@ class RedBlackTree {
                     break;
                 }
             } else {
-                // Casos espelhados
+    
                 let w = xParent.left;
                 
                 if (w !== null && w.isRed()) {
@@ -433,9 +400,7 @@ class RedBlackTree {
         }
     }
 
-    /**
-     * Percurso em ordem (in-order)
-     */
+
     inOrder(node = this.root, result = []) {
         if (node !== null) {
             this.inOrder(node.left, result);
@@ -445,9 +410,7 @@ class RedBlackTree {
         return result;
     }
 
-    /**
-     * Percurso em pré-ordem (pre-order)
-     */
+
     preOrder(node = this.root, result = []) {
         if (node !== null) {
             result.push({ value: node.value, color: node.color });
@@ -457,9 +420,6 @@ class RedBlackTree {
         return result;
     }
 
-    /**
-     * Percurso em pós-ordem (post-order)
-     */
     postOrder(node = this.root, result = []) {
         if (node !== null) {
             this.postOrder(node.left, result);
@@ -469,49 +429,35 @@ class RedBlackTree {
         return result;
     }
 
-    /**
-     * Retorna a altura da árvore
-     */
+
     height(node = this.root) {
         if (node === null) return -1;
         return 1 + Math.max(this.height(node.left), this.height(node.right));
     }
 
-    /**
-     * Verifica se a árvore está vazia
-     */
     isEmpty() {
         return this.root === null;
     }
 
-    /**
-     * Limpa a árvore
-     */
     clear() {
         this.root = null;
         this.clearAnimationSteps();
     }
 
-    /**
-     * Conta o número de nós
-     */
     count(node = this.root) {
         if (node === null) return 0;
         return 1 + this.count(node.left) + this.count(node.right);
     }
 
-    /**
-     * Verifica as propriedades da árvore rubro-negra
-     */
     verify() {
         const errors = [];
         
-        // Propriedade 2: Raiz deve ser preta
+  
         if (this.root !== null && this.root.isRed()) {
             errors.push('Violação: A raiz é vermelha (deveria ser preta)');
         }
 
-        // Verifica propriedades 4 e 5
+    
         const checkNode = (node, blackCount, pathBlackCount) => {
             if (node === null) {
                 if (pathBlackCount === -1) {
@@ -523,7 +469,6 @@ class RedBlackTree {
                 return pathBlackCount;
             }
 
-            // Propriedade 4: Nó vermelho não pode ter filho vermelho
             if (node.isRed()) {
                 if ((node.left !== null && node.left.isRed()) || 
                     (node.right !== null && node.right.isRed())) {
@@ -548,7 +493,7 @@ class RedBlackTree {
     }
 }
 
-// Exportar para uso em outros módulos
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = RedBlackTree;
 }

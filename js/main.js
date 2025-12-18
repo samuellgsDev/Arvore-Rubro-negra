@@ -1,12 +1,8 @@
-/**
- * Script principal - Controle da interface
- */
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa a árvore e o visualizador
+
     const tree = new RedBlackTree();
     const visualizer = new TreeVisualizer('treeCanvas');
 
-    // Elementos DOM
     const insertInput = document.getElementById('insertValue');
     const insertBtn = document.getElementById('insertBtn');
     const searchInput = document.getElementById('searchValue');
@@ -29,36 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const traversalResult = document.getElementById('traversalResult');
     const verificationStatus = document.getElementById('verificationStatus');
 
-    // Flag para controlar animações
+
     let isAnimating = false;
 
-    /**
-     * Adiciona entrada no log
-     */
     function addLog(message, type = 'info') {
         const entry = document.createElement('div');
         entry.className = `log-entry ${type}`;
         entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
         logContent.insertBefore(entry, logContent.firstChild);
-        
-        // Limita o número de entradas no log
+       
         while (logContent.children.length > 50) {
             logContent.removeChild(logContent.lastChild);
         }
     }
 
-    /**
-     * Atualiza as informações da árvore
-     */
     function updateInfo() {
         nodeCount.textContent = tree.count();
         treeHeight.textContent = tree.height() + 1;
         blackHeight.textContent = calculateBlackHeight(tree.root);
     }
 
-    /**
-     * Calcula a altura negra da árvore
-     */
     function calculateBlackHeight(node) {
         if (node === null) return 0;
         
@@ -73,17 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return height;
     }
 
-    /**
-     * Desenha a árvore
-     */
     function drawTree(highlightValue = null) {
         visualizer.drawTree(tree, highlightValue);
         updateInfo();
     }
 
-    /**
-     * Anima os passos de uma operação
-     */
     async function animateOperation() {
         if (tree.animationSteps.length === 0) return;
         
@@ -99,9 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
         drawTree();
     }
 
-    /**
-     * Desabilita/habilita botões durante animação
-     */
     function disableButtons(disabled) {
         const buttons = document.querySelectorAll('.btn');
         buttons.forEach(btn => {
@@ -110,9 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /**
-     * Operação de inserção
-     */
     async function insert() {
         const value = parseInt(insertInput.value);
         
@@ -127,9 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await animateOperation();
     }
 
-    /**
-     * Operação de busca
-     */
+
     async function search() {
         const value = parseInt(searchInput.value);
         
@@ -149,9 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Operação de remoção
-     */
+
     async function remove() {
         const value = parseInt(deleteInput.value);
         
@@ -166,18 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
         await animateOperation();
     }
 
-    /**
-     * Insere valor aleatório
-     */
     async function insertRandom() {
         const value = Math.floor(Math.random() * 100) + 1;
         tree.insert(value);
         await animateOperation();
     }
 
-    /**
-     * Insere exemplo didático
-     */
+  
     async function insertExample() {
         tree.clear();
         drawTree();
@@ -194,9 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addLog('Exemplo didático concluído!', 'success');
     }
 
-    /**
-     * Verifica as propriedades da árvore
-     */
+ 
     function verify() {
         const result = tree.verify();
         
@@ -218,9 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
 
-    /**
-     * Limpa a árvore
-     */
+ 
     function clear() {
         tree.clear();
         drawTree();
@@ -228,33 +189,25 @@ document.addEventListener('DOMContentLoaded', () => {
         traversalResult.textContent = 'Clique em um botão de percurso para visualizar';
     }
 
-    /**
-     * Exibe percurso em ordem
-     */
+
     function showInOrder() {
         const result = tree.inOrder();
         displayTraversal(result, 'Em Ordem');
     }
 
-    /**
-     * Exibe percurso em pré-ordem
-     */
+
     function showPreOrder() {
         const result = tree.preOrder();
         displayTraversal(result, 'Pré-Ordem');
     }
 
-    /**
-     * Exibe percurso em pós-ordem
-     */
+   
     function showPostOrder() {
         const result = tree.postOrder();
         displayTraversal(result, 'Pós-Ordem');
     }
 
-    /**
-     * Exibe resultado do percurso
-     */
+
     function displayTraversal(nodes, type) {
         if (nodes.length === 0) {
             traversalResult.innerHTML = 'Árvore vazia';
@@ -269,16 +222,14 @@ document.addEventListener('DOMContentLoaded', () => {
         addLog(`Percurso ${type}: ${nodes.map(n => n.value).join(', ')}`, 'info');
     }
 
-    /**
-     * Atualiza velocidade da animação
-     */
+   
     function updateSpeed() {
         const speed = parseInt(speedSlider.value);
         speedValue.textContent = speed;
         visualizer.setAnimationSpeed(speed);
     }
 
-    // Event Listeners
+
     insertBtn.addEventListener('click', insert);
     insertInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') insert();
